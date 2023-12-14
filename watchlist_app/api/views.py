@@ -8,21 +8,13 @@ from rest_framework import status
 
 
 ### Classs based views ##############################################
-class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+class ReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-    
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
-class ReviewDetail(mixins.RetrieveModelMixin,  generics.GenericAPIView):
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
         queryset = Review.objects.all()
         serializer_class = ReviewSerializer
-        def get(self, request, *args, **kwargs):
-            return self.retrieve(request, *args, **kwargs)  
 
 class StreamPlatformAV(APIView):
     
@@ -62,7 +54,6 @@ class StreamPlatformDetailAV(APIView):
         platform = StreamPlatform.objects.get(pk=pk)
         platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-        
 
 class WatchListAV(APIView):
     
