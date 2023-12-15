@@ -1,13 +1,43 @@
 from rest_framework.response import Response
 # from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, viewsets
 from watchlist_app.models import WatchList, StreamPlatform, Review
 from watchlist_app.api.serializers import (WatchListSerializer, StreamPlatformSerializer, ReviewSerializer)
 from rest_framework import status
-
+from django.shortcuts import get_object_or_404
 
 ### Classs based views ##############################################
+class StreamPlatformMVS(viewsets.ModelViewSet):
+    queryset = StreamPlatform.objects.all()
+    serializer_class = StreamPlatformSerializer
+
+class StreamPlatformVS(viewsets.ViewSet):
+    def list(self, request):
+        queryset = StreamPlatform.objects.all()
+        serializer = StreamPlatformSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def retrieve(self, request, pk=None):
+        queryset = StreamPlatform.objects.all()
+        watchilst = get_object_or_404(queryset, pk=pk)
+        serializer = StreamPlatformSerializer(watchilst)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = StreamPlatformSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, reqeuest, pk):
+        platform = StreamPlatform.objects.get(pk=pk)
+        platform.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     def perform_create(self, serializer):
