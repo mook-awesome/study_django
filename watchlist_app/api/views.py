@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 # from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
@@ -38,7 +39,7 @@ class StreamPlatformVS(viewsets.ViewSet):
         platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
-class ReviewCreate(generics.CreateAPIView):
+class ReviewCreate(generics.ListAPIView):
     serializer_class = ReviewSerializer
     def get_queryset(self):
         return Review.objects.all()
@@ -61,10 +62,11 @@ class ReviewCreate(generics.CreateAPIView):
 
         serializer.save(watchlist=watchlist, review_user=review_user)
     
-class ReviewList(generics.ListCreateAPIView):
+class ReviewList(generics.ListAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    
+    permission_classes = [IsAuthenticated]
+
     def get_queryset(self):
         pk = self.kwargs['pk']
         return Review.objects.filter(watchlist=pk)
