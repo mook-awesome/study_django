@@ -9,6 +9,8 @@ from watchlist_app.api.serializers import (WatchListSerializer, StreamPlatformSe
 from watchlist_app.api.permissions import IsReviewUserOrReadOnly, IsAdminOrReadOnly
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 ### Classs based views ##############################################
 class StreamPlatformMVS(viewsets.ModelViewSet):
@@ -72,7 +74,7 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewList(generics.ListAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     def get_queryset(self):
         pk = self.kwargs['pk']
         return Review.objects.filter(watchlist=pk)
