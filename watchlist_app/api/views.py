@@ -40,10 +40,11 @@ class StreamPlatformVS(viewsets.ViewSet):
         platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
-class ReviewCreate(generics.ListAPIView):
+class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     def get_queryset(self):
         return Review.objects.all()
+    
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
         watchlist = WatchList.objects.get(pk=pk)
