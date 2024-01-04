@@ -9,7 +9,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST', ])
 def logout_view(request):
-    
+    """
+        logout 하면 token을 제거한다.
+    """
     if request.method == 'POST':
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
@@ -27,13 +29,15 @@ def registraction_view(request):
             data['response'] = "Registraction Successfull!"
             data['username'] = account.username
             data['email'] = account.email
-            # token = Token.objects.get(user=account).key
-            # data['token'] = token
-            refresh = RefreshToken.for_user(account)
-            data['token'] = {
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-            }
+            token = Token.objects.get(user=account).key
+            data['token'] = token
+            
+            ### JWT Authentication 사용하는 경우
+            # refresh = RefreshToken.for_user(account)
+            # data['token'] = {
+            #     'refresh': str(refresh),
+            #     'access': str(refresh.access_token),
+            # }
             
         else:
             data = serializer.errors

@@ -134,9 +134,19 @@ REST_FRAMEWORK = {
     #     'rest_framework.authentication.BasicAuthentication',
     # ], 
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ] 
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ], 
+    # 'DEFAULT_THROTTLE_CLASSES' : [
+    #     'rest_framework.throttling.AnonRateThrottle', # For not restered user
+    #     'rest_framework.throttling.UserRateThrottle'
+    # ],
+    'DEFAULT_THROTTLE_RATES' : {
+        'anon': '1/day',
+        'user' : '3/day',
+        'review-create' : '1/day',
+        'review-list' : '10/day',
+    }
 }
 SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True, # TokenRefreshView가 제출되면 refresh token과 access token을 재 생성한다.

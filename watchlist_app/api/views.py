@@ -10,7 +10,8 @@ from watchlist_app.api.permissions import IsReviewUserOrReadOnly, IsAdminOrReadO
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from watchlist_app.api.throttling import ReviewCreateThrottle, ReviewListThrottle
 
 ### Classs based views ##############################################
 class StreamPlatformMVS(viewsets.ModelViewSet):
@@ -48,6 +49,7 @@ class StreamPlatformVS(viewsets.ViewSet):
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ReviewCreateThrottle]
     
     def get_queryset(self):
         return Review.objects.all()
@@ -75,6 +77,7 @@ class ReviewList(generics.ListAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ReviewListThrottle]
     def get_queryset(self):
         pk = self.kwargs['pk']
         return Review.objects.filter(watchlist=pk)
@@ -83,6 +86,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewUserOrReadOnly]
+    throttle_classes = [UserRateThrottle, AnonRateThrottle]
 
 class StreamPlatformAV(APIView):
     permission_classes = [IsAdminOrReadOnly]

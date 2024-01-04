@@ -8,6 +8,7 @@ urlpatterns = [
     path('register/', registraction_view, name='register'),
     path('logout/', logout_view, name='logout'),
     
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    ### JWT Authentication 사용하는 경우
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
