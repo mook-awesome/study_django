@@ -12,11 +12,14 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from watchlist_app.api.Pagination import WatchListPagination
 
 ### Classs based views ##############################################
 class WatchListGV(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
+    pagination_class = WatchListPagination
+
     
     # Filter
     filter_backends = [DjangoFilterBackend]
@@ -29,6 +32,7 @@ class WatchListGV(generics.ListAPIView):
     ### Order
     filter_backends = [filters.OrderingFilter]
     filterset_fields = ['avg_rating']    
+    
     
 class UserReview(generics.ListAPIView):
     serializer_class = ReviewSerializer
