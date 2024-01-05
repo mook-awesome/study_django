@@ -151,6 +151,10 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.LimitOffsetPagination',
     # 'PAGE_SIZE' : 5,
     
+    ### JSON 형태로 페이지에 표시하는 옵션
+    'DEFAULT_RENDERER_CLASSES' : (
+        'rest_framework.renderers.JSONRenderer',
+    )
 }
 SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True, # TokenRefreshView가 제출되면 refresh token과 access token을 재 생성한다.
